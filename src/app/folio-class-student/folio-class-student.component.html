@@ -1,0 +1,183 @@
+<alert></alert>
+<!-- Class Section -->
+<div>
+    <h5 class="card-header">Classes</h5>
+    <div *ngIf="!addingClass">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th style="width: 30%">Class Name</th>
+                    <th style="width: 30%">Location</th>
+                    <th style="width: 30%">Teacher Name</th>
+                    <th style="width: 10%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let fClass of folioClasses" class="clickable-row" (click)="selectClass(fClass)">
+                    <td>{{fClass.name}}</td>
+                    <td>{{fClass.location}}</td>
+                    <td>{{fClass.teacherName}}</td>
+                    <td style="white-space: nowrap">
+                        <button (click)="editClass(fClass)" class="btn btn-sm btn-primary mr-1">
+                            Edit
+                        </button>
+                        <button (click)="deleteClass(fClass.id)" class="btn btn-sm btn-danger btn-delete-user"
+                            [disabled]="fClass.isDeleting">
+                            <span *ngIf="fClass.isDeleting" class="spinner-border spinner-border-sm"></span>
+                            <span *ngIf="!fClass.isDeleting">Delete</span>
+                        </button>
+                    </td>
+                </tr>
+                <tr *ngIf="!folioClasses">
+                    <td colspan="4" class="text-center">
+                        <span class="spinner-border spinner-border-lg align-center"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <h5 class="card-header">
+            <button (click)="addClass()" class="btn btn-sm btn-primary mr-1" *ngIf="!(deletingClass || editingClass)">
+                Add
+            </button>
+        </h5>
+    </div>
+    <div class="card m-3" *ngIf="addingClass">
+        <h5 class="card-header">{{selectedClass?'Edit ' + selectedClass.name:'Add New Class' }}</h5>
+        <div class="card-body">
+            <form [formGroup]="classForm" (ngSubmit)="onSubmit()">
+                <div class="form-row">
+
+                    <div class="form-group col-3">
+                        <label>Class Name</label>
+                        <input type="text" formControlName="name" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+                        <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                            <div *ngIf="f.name.errors.required">Class Name is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group col-3">
+                        <label>Location</label>
+                        <input type="text" formControlName="location" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.location.errors }" />
+                        <div *ngIf="submitted && f.location.errors" class="invalid-feedback">
+                            <div *ngIf="f.location.errors.required">Location is required</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label>Teacher Name</label>
+                        <input type="text" formControlName="teacherName" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.teacherName.errors }" />
+                        <div *ngIf="submitted && f.teacherName.errors" class="invalid-feedback">
+                            <div *ngIf="f.teacherName.errors.required">Teacher Name is required</div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="text-left">
+                    <button class="btn btn-primary mr-1">Save</button>
+                    <button class="btn btn-secondary" type="reset" (click)="onReset()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+<div>
+    &nbsp;&nbsp;&nbsp;
+</div>
+
+
+<!-- Student Section -->
+<div *ngIf="selectedClass && !addingClass && !deletingClass && !editingClass">
+    <h5 class="card-header">{{selectedClass.name}}</h5>
+    <div *ngIf="!addingStudent">
+        
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th style="width: 30%">Student Name</th>
+                    <th style="width: 30%">Age</th>
+                    <th style="width: 30%">GPA</th>
+                    <th style="width: 10%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let student of students">
+                    <td  [ngClass]="{'text-success' : student.gpa>=highLightGPA}">{{student.firstName + " " +  student.lastName}}</td>
+                    <td>{{student.age}}</td>
+                    <td>{{student.gpa}}</td>
+                    <td style="white-space: nowrap">
+                        <button (click)="editStudent(student)" class="btn btn-sm btn-primary mr-1">
+                            Edit
+                        </button>
+                        <button (click)="deleteStudent(student.id)" class="btn btn-sm btn-danger btn-delete-user"
+                            [disabled]="student.isDeleting">
+                            <span *ngIf="student.isDeleting" class="spinner-border spinner-border-sm"></span>
+                            <span *ngIf="!student.isDeleting">Delete</span>
+                        </button>
+                    </td>
+                </tr>
+                <tr *ngIf="!students">
+                    <td colspan="4" class="text-center">
+                        <span class="align-center">
+                            No Record Found
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <h5 class="card-header">
+            <button (click)="addStudent()" class="btn btn-sm btn-primary mr-1" *ngIf="!(deletingStudent || editingStudent)">
+                Add
+            </button>
+        </h5>
+    </div>
+    <div class="card m-3" *ngIf="addingStudent">
+        <h5 class="card-header">{{selectedStudent?('Edit ' + selectedStudent.firstName + ' ' + selectedStudent.lastName):'Add New Student' }}</h5>
+        <div class="card-body">
+            <form [formGroup]="studentForm" (ngSubmit)="onStudentSubmit()">
+                <div class="form-row">
+                    <div class="form-group col-3">
+                        <label>First Name</label>
+                        <input type="text" formControlName="firstName" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedStudent && s.firstName.errors }" />
+                        <div *ngIf="submittedStudent && s.firstName.errors" class="invalid-feedback">
+                            <div *ngIf="s.firstName.errors.required">First Name is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group col-3">
+                        <label>Last Name</label>
+                        <input type="text" formControlName="lastName" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedStudent && s.lastName.errors }" />
+                        <div *ngIf="submittedStudent && s.lastName.errors" class="invalid-feedback">
+                            <div *ngIf="s.lastName.errors.required">Last Name is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group col-2">
+                        <label>Age</label>
+                        <input type="text" formControlName="age" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedStudent && s.age.errors }" />
+                        <div *ngIf="submittedStudent && s.age.errors" class="invalid-feedback">
+                            <div *ngIf="s.age.errors.required">Age is required</div>
+
+                        </div>
+                    </div>
+                    <div class="form-group col-2">
+                        <label>GPA</label>
+                        <input type="text" formControlName="gpa" class="form-control"
+                            [ngClass]="{ 'is-invalid': submittedStudent && s.gpa.errors }" />
+                        <div *ngIf="submittedStudent && s.gpa.errors" class="invalid-feedback">
+                            <div *ngIf="s.gpa.errors.required">Age is required</div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="text-left">
+                    <button class="btn btn-primary mr-1">Save</button>
+                    <button class="btn btn-secondary" type="reset" (click)="onStudentReset()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
