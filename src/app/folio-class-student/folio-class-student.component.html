@@ -50,16 +50,16 @@
                     <div class="form-group col-3">
                         <label>Class Name</label>
                         <input type="text" formControlName="name" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
-                        <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                            [ngClass]="{ 'is-invalid': f.name.errors && (f.name.touched || f.name.dirty) }" />
+                        <div *ngIf="f.name.errors && (f.name.touched || f.name.dirty)" class="invalid-feedback">
                             <div *ngIf="f.name.errors.required">Class Name is required</div>
                         </div>
                     </div>
                     <div class="form-group col-3">
                         <label>Location</label>
                         <input type="text" formControlName="location" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f.location.errors }" />
-                        <div *ngIf="submitted && f.location.errors" class="invalid-feedback">
+                            [ngClass]="{ 'is-invalid': f.location.errors && (f.location.touched || f.location.dirty) }" />
+                        <div *ngIf="f.location.errors && (f.location.touched || f.location.dirty)" class="invalid-feedback">
                             <div *ngIf="f.location.errors.required">Location is required</div>
                         </div>
                     </div>
@@ -67,15 +67,15 @@
                     <div class="form-group col-3">
                         <label>Teacher Name</label>
                         <input type="text" formControlName="teacherName" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f.teacherName.errors }" />
-                        <div *ngIf="submitted && f.teacherName.errors" class="invalid-feedback">
+                            [ngClass]="{ 'is-invalid': f.teacherName.errors && (f.teacherName.touched || f.teacherName.dirty) }" />
+                        <div *ngIf="f.teacherName.errors  && (f.teacherName.touched || f.teacherName.dirty)" class="invalid-feedback">
                             <div *ngIf="f.teacherName.errors.required">Teacher Name is required</div>
                         </div>
                     </div>
 
                 </div>
                 <div class="text-left">
-                    <button class="btn btn-primary mr-1">Save</button>
+                    <button class="btn btn-primary mr-1" [disabled]="classForm.invalid" >Save</button>
                     <button class="btn btn-secondary" type="reset" (click)="onReset()">Cancel</button>
                 </div>
             </form>
@@ -141,40 +141,46 @@
                     <div class="form-group col-3">
                         <label>First Name</label>
                         <input type="text" formControlName="firstName" class="form-control"
-                            [ngClass]="{ 'is-invalid': submittedStudent && s.firstName.errors }" />
-                        <div *ngIf="submittedStudent && s.firstName.errors" class="invalid-feedback">
+                            [ngClass]="{ 'is-invalid': s.firstName.errors && (s.firstName.touched || s.firstName.dirty) }" />
+                        <div *ngIf="s.firstName.errors && (s.firstName.touched || s.firstName.dirty)" class="invalid-feedback">
                             <div *ngIf="s.firstName.errors.required">First Name is required</div>
                         </div>
                     </div>
                     <div class="form-group col-3">
                         <label>Last Name</label>
                         <input type="text" formControlName="lastName" class="form-control"
-                            [ngClass]="{ 'is-invalid': submittedStudent && s.lastName.errors }" />
-                        <div *ngIf="submittedStudent && s.lastName.errors" class="invalid-feedback">
+                            [ngClass]="{ 'is-invalid': s.lastName.errors && (s.lastName.touched || s.lastName.dirty) }" />
+                        <div *ngIf="s.lastName.errors && (s.lastName.touched || s.lastName.dirty)" class="invalid-feedback">
                             <div *ngIf="s.lastName.errors.required">Last Name is required</div>
                         </div>
                     </div>
                     <div class="form-group col-2">
                         <label>Age</label>
                         <input type="text" formControlName="age" class="form-control"
-                            [ngClass]="{ 'is-invalid': submittedStudent && s.age.errors }" />
-                        <div *ngIf="submittedStudent && s.age.errors" class="invalid-feedback">
+                            [ngClass]="{ 'is-invalid': s.age.errors && (s.age.touched || s.age.dirty) }" />
+                        <div *ngIf="s.age.errors && (s.age.touched || s.age.dirty)" class="invalid-feedback">
                             <div *ngIf="s.age.errors.required">Age is required</div>
-
+                            <div *ngIf="s.age.errors.pattern">Enter Numeric value only</div>
+                            <div *ngIf="s.age.hasError('min') || s.age.hasError('max')">
+                                Enter value between 18 and 55
+                          </div> 
                         </div>
                     </div>
                     <div class="form-group col-2">
                         <label>GPA</label>
                         <input type="text" formControlName="gpa" class="form-control"
-                            [ngClass]="{ 'is-invalid': submittedStudent && s.gpa.errors }" />
-                        <div *ngIf="submittedStudent && s.gpa.errors" class="invalid-feedback">
-                            <div *ngIf="s.gpa.errors.required">Age is required</div>
-
+                            [ngClass]="{ 'is-invalid': s.gpa.errors && (s.gpa.touched || s.gpa.dirty) }" />
+                        <div *ngIf="s.gpa.errors && (s.gpa.touched || s.gpa.dirty)" class="invalid-feedback">
+                            <div *ngIf="s.gpa.errors.required">GPA is required</div>
+                            <div *ngIf="s.gpa.errors.pattern">Enter Numeric value only</div>
+                            <div *ngIf="s.gpa.hasError('min') || s.gpa.hasError('max')">
+                                Enter value between 0 and 5
+                          </div> 
                         </div>
                     </div>
                 </div>
                 <div class="text-left">
-                    <button class="btn btn-primary mr-1">Save</button>
+                    <button class="btn btn-primary mr-1" [disabled]="studentForm.invalid">Save</button>
                     <button class="btn btn-secondary" type="reset" (click)="onStudentReset()">Cancel</button>
                 </div>
             </form>

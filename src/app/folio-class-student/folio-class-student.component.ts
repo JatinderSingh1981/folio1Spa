@@ -12,10 +12,10 @@ import { first } from 'rxjs/operators';
 })
 export class FolioClassStudentComponent implements OnInit {
   classForm: FormGroup;
-  submitted = false;
+  
 
   studentForm: FormGroup;
-  submittedStudent = false;
+  
   selectedClass = null;
   selectedStudent = null;
 
@@ -46,13 +46,14 @@ export class FolioClassStudentComponent implements OnInit {
       teacherName: ['', Validators.required]
     });
 
+    //Validators.pattern("^[0-9]*$"),
     this.studentForm = this.formBuilder.group({
       id: 0,
       folioClassId: 0,
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      age: ['', Validators.required],
-      gpa: ['', Validators.required],
+      age: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(18), Validators.max(55)]],
+      gpa: ['', [Validators.required, Validators.pattern("^[0-9]*\.?\[0-9]{0,2}$"), Validators.min(0), Validators.max(5)]],
     });
 
     this.getAllClasses();
@@ -121,7 +122,7 @@ export class FolioClassStudentComponent implements OnInit {
 
   //On Click of Save
   onSubmit() {
-    this.submitted = true;
+    // this.submitted = true;
 
     // stop here if form is invalid
     if (this.classForm.invalid) {
@@ -159,7 +160,7 @@ export class FolioClassStudentComponent implements OnInit {
   }
 
   onReset() {
-    this.submitted = false;
+    // this.submitted = false;
     this.addingClass = false;
     this.editingClass = false;
     this.deletingClass = false;
@@ -204,7 +205,7 @@ export class FolioClassStudentComponent implements OnInit {
   }
 
   onStudentSubmit() {
-    this.submittedStudent = true;
+    // this.submittedStudent = true;
 
     // stop here if form is invalid
     if (this.studentForm.invalid) {
@@ -254,7 +255,7 @@ export class FolioClassStudentComponent implements OnInit {
   }
 
   onStudentReset() {
-    this.submittedStudent = false;
+    // this.submittedStudent = false;
     this.addingStudent = false;
     this.editingStudent = false;
     this.deletingStudent = false;
