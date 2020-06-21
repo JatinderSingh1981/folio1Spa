@@ -7,3 +7,14 @@ export class FolioClass {
     isDeleting:boolean;
     isEditing:boolean;
 }
+
+
+export class FolioClassTemplate {
+    id: number;
+    name: string;
+    location: string;
+    teacherName: string;
+    
+    isDeleting:boolean;
+    isEditing:boolean;
+}

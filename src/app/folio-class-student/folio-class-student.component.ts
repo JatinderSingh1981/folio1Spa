@@ -4,6 +4,7 @@ import { FolioClass, Student } from '../_models';
 import { FolioService } from '../_services';
 import { AlertService } from '../alert/alert.service';
 import { first } from 'rxjs/operators';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-folio-class-student',
@@ -12,10 +13,10 @@ import { first } from 'rxjs/operators';
 })
 export class FolioClassStudentComponent implements OnInit {
   classForm: FormGroup;
-  
+
 
   studentForm: FormGroup;
-  
+
   selectedClass = null;
   selectedStudent = null;
 
@@ -32,11 +33,14 @@ export class FolioClassStudentComponent implements OnInit {
 
   highLightGPA = 3.2;
 
+  closeResult: string;
+
   options = {
     autoClose: true,
     keepAfterRouteChange: false
   };
-  constructor(private formBuilder: FormBuilder, private fService: FolioService, private alertService: AlertService) { }
+  constructor(private formBuilder: FormBuilder, private fService: FolioService,
+    private alertService: AlertService, private modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.classForm = this.formBuilder.group({
@@ -81,7 +85,13 @@ export class FolioClassStudentComponent implements OnInit {
 
     this.fService.getStudentsForSelectedClass(this.selectedClass.id)
       .pipe(first())
-      .subscribe(result => this.students = result.item1);
+      .subscribe((result) => {
+        if (result && result.item1)
+          this.students = result.item1;
+        else
+          this.students = [];
+
+      });
   }
 
   addClass() {
@@ -103,23 +113,56 @@ export class FolioClassStudentComponent implements OnInit {
     this.selectedClass = selected;
   }
 
-  deleteClass(id: string) {
-    const result = this.folioClasses.find(x => x.id === id);
-    result.isDeleting = this.deletingClass = true;
-    this.fService.deleteClass(id)
+  // private getDismissReason(reason: any): string {
+  //   if (reason === ModalDismissReasons.ESC) {
+  //     return 'by pressing ESC';
+  //   } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+  //     return 'by clicking on a backdrop';
+  //   } else {
+  //     return `with: ${reason}`;
+  //   }
+  // }
+
+  deleteClassClick(selected: FolioClass, content: any) {
+    selected.isDeleting = this.deletingClass = true;
+    this.selectedClass = selected;
+    this.openDeleteDialog(content, true);
+  }
+
+  openDeleteDialog(content: any, deleteClass: boolean) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', centered: true }).result.then((result) => {
+      // this.closeResult = `Closed with: ${result}`;
+      if (result == "Delete") {
+        deleteClass ? this.deleteClass() : this.deleteStudent();
+      }
+      else {
+        deleteClass ? this.cancelDeleteClass() : this.cancelDeleteStudent();
+      }
+    }
+      , (reason) => {
+        deleteClass ? this.cancelDeleteClass() : this.cancelDeleteStudent();
+        //this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;}
+      });
+  }
+  cancelDeleteClass() {
+    this.selectedClass.isDeleting = this.deletingClass = false;
+    this.selectedClass = null;
+  }
+  deleteClass() {
+
+    this.fService.deleteClass(+this.selectedClass.id)
       .pipe(first())
       .subscribe((res) => {
         if (res.item2) {
-          this.folioClasses = this.folioClasses.filter(x => x.id !== id);
+          this.folioClasses = this.folioClasses.filter(x => x.id !== this.selectedClass.id);
 
           this.deletingClass = false;
-          this.selectedClass = false;
+          this.selectedClass = null;
         }
 
         this.showAlertMessage(res.item2, res.item3);
       });
   }
-
   //On Click of Save
   onSubmit() {
     // this.submitted = true;
@@ -190,18 +233,28 @@ export class FolioClassStudentComponent implements OnInit {
     this.editingStudent = true;
     this.selectedStudent = selected;
   }
-  deleteStudent(id: string) {
-    const result = this.students.find(x => x.id === id);
-    result.isDeleting = this.deletingStudent = true;
-    this.fService.deleteStudent(id)
+  deleteStudentClick(selected: Student, content: any) {
+
+    selected.isDeleting = this.deletingStudent = true;
+    this.selectedStudent = selected;
+    this.openDeleteDialog(content, false);
+  }
+
+  deleteStudent() {
+    this.fService.deleteStudent(+this.selectedStudent.id)
       .pipe(first())
       .subscribe((res) => {
         if (res.item2) {
-          this.students = this.students.filter(x => x.id !== id);
+          this.students = this.students.filter(x => x.id !== this.selectedStudent.id);
           this.deletingStudent = false;
         }
         this.showAlertMessage(res.item2, res.item3);
       });
+  }
+  
+  cancelDeleteStudent() {
+    this.selectedStudent.isDeleting = this.deletingClass = false;
+    this.selectedStudent = null;
   }
 
   onStudentSubmit() {

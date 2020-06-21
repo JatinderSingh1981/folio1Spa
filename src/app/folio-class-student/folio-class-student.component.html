@@ -1,6 +1,6 @@
 <alert></alert>
 <!-- Class Section -->
-<div>
+<div class="card m-3">
     <h5 class="card-header">Classes</h5>
     <div *ngIf="!addingClass">
         <table class="table table-striped table-hover">
@@ -21,11 +21,13 @@
                         <button (click)="editClass(fClass)" class="btn btn-sm btn-primary mr-1">
                             Edit
                         </button>
-                        <button (click)="deleteClass(fClass.id)" class="btn btn-sm btn-danger btn-delete-user"
-                            [disabled]="fClass.isDeleting">
+                        
+                        <button type="button" (click)="deleteClassClick(fClass, deleteModal)" class="btn btn-sm btn-danger btn-delete-user" data-toggle="modal"
+                             [disabled]="fClass.isDeleting">
                             <span *ngIf="fClass.isDeleting" class="spinner-border spinner-border-sm"></span>
                             <span *ngIf="!fClass.isDeleting">Delete</span>
                         </button>
+                        
                     </td>
                 </tr>
                 <tr *ngIf="!folioClasses">
@@ -59,7 +61,8 @@
                         <label>Location</label>
                         <input type="text" formControlName="location" class="form-control"
                             [ngClass]="{ 'is-invalid': f.location.errors && (f.location.touched || f.location.dirty) }" />
-                        <div *ngIf="f.location.errors && (f.location.touched || f.location.dirty)" class="invalid-feedback">
+                        <div *ngIf="f.location.errors && (f.location.touched || f.location.dirty)"
+                            class="invalid-feedback">
                             <div *ngIf="f.location.errors.required">Location is required</div>
                         </div>
                     </div>
@@ -68,14 +71,15 @@
                         <label>Teacher Name</label>
                         <input type="text" formControlName="teacherName" class="form-control"
                             [ngClass]="{ 'is-invalid': f.teacherName.errors && (f.teacherName.touched || f.teacherName.dirty) }" />
-                        <div *ngIf="f.teacherName.errors  && (f.teacherName.touched || f.teacherName.dirty)" class="invalid-feedback">
+                        <div *ngIf="f.teacherName.errors  && (f.teacherName.touched || f.teacherName.dirty)"
+                            class="invalid-feedback">
                             <div *ngIf="f.teacherName.errors.required">Teacher Name is required</div>
                         </div>
                     </div>
 
                 </div>
                 <div class="text-left">
-                    <button class="btn btn-primary mr-1" [disabled]="classForm.invalid" >Save</button>
+                    <button class="btn btn-primary mr-1" [disabled]="classForm.invalid">Save</button>
                     <button class="btn btn-secondary" type="reset" (click)="onReset()">Cancel</button>
                 </div>
             </form>
@@ -83,16 +87,14 @@
     </div>
 
 </div>
-<div>
-    &nbsp;&nbsp;&nbsp;
-</div>
+
 
 
 <!-- Student Section -->
-<div *ngIf="selectedClass && !addingClass && !deletingClass && !editingClass">
+<div class="card m-3" *ngIf="selectedClass && !addingClass && !deletingClass && !editingClass">
     <h5 class="card-header">{{selectedClass.name}}</h5>
     <div *ngIf="!addingStudent">
-        
+
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -104,14 +106,16 @@
             </thead>
             <tbody>
                 <tr *ngFor="let student of students">
-                    <td  [ngClass]="{'text-success' : student.gpa>=highLightGPA}">{{student.firstName + " " +  student.lastName}}</td>
+                    <td [ngClass]="{'text-success' : student.gpa>=highLightGPA}">
+                        {{student.firstName + " " +  student.lastName}}</td>
                     <td>{{student.age}}</td>
                     <td>{{student.gpa}}</td>
                     <td style="white-space: nowrap">
                         <button (click)="editStudent(student)" class="btn btn-sm btn-primary mr-1">
                             Edit
                         </button>
-                        <button (click)="deleteStudent(student.id)" class="btn btn-sm btn-danger btn-delete-user"
+
+                        <button (click)="deleteStudentClick(student, deleteModal)" class="btn btn-sm btn-danger btn-delete-user"
                             [disabled]="student.isDeleting">
                             <span *ngIf="student.isDeleting" class="spinner-border spinner-border-sm"></span>
                             <span *ngIf="!student.isDeleting">Delete</span>
@@ -128,13 +132,16 @@
             </tbody>
         </table>
         <h5 class="card-header">
-            <button (click)="addStudent()" class="btn btn-sm btn-primary mr-1" *ngIf="!(deletingStudent || editingStudent)">
+            <button (click)="addStudent()" class="btn btn-sm btn-primary mr-1"
+                *ngIf="!(deletingStudent || editingStudent)">
                 Add
             </button>
         </h5>
     </div>
     <div class="card m-3" *ngIf="addingStudent">
-        <h5 class="card-header">{{selectedStudent?('Edit ' + selectedStudent.firstName + ' ' + selectedStudent.lastName):'Add New Student' }}</h5>
+        <h5 class="card-header">
+            {{selectedStudent?('Edit ' + selectedStudent.firstName + ' ' + selectedStudent.lastName):'Add New Student' }}
+        </h5>
         <div class="card-body">
             <form [formGroup]="studentForm" (ngSubmit)="onStudentSubmit()">
                 <div class="form-row">
@@ -142,7 +149,8 @@
                         <label>First Name</label>
                         <input type="text" formControlName="firstName" class="form-control"
                             [ngClass]="{ 'is-invalid': s.firstName.errors && (s.firstName.touched || s.firstName.dirty) }" />
-                        <div *ngIf="s.firstName.errors && (s.firstName.touched || s.firstName.dirty)" class="invalid-feedback">
+                        <div *ngIf="s.firstName.errors && (s.firstName.touched || s.firstName.dirty)"
+                            class="invalid-feedback">
                             <div *ngIf="s.firstName.errors.required">First Name is required</div>
                         </div>
                     </div>
@@ -150,7 +158,8 @@
                         <label>Last Name</label>
                         <input type="text" formControlName="lastName" class="form-control"
                             [ngClass]="{ 'is-invalid': s.lastName.errors && (s.lastName.touched || s.lastName.dirty) }" />
-                        <div *ngIf="s.lastName.errors && (s.lastName.touched || s.lastName.dirty)" class="invalid-feedback">
+                        <div *ngIf="s.lastName.errors && (s.lastName.touched || s.lastName.dirty)"
+                            class="invalid-feedback">
                             <div *ngIf="s.lastName.errors.required">Last Name is required</div>
                         </div>
                     </div>
@@ -163,7 +172,7 @@
                             <div *ngIf="s.age.errors.pattern">Enter Numeric value only</div>
                             <div *ngIf="s.age.hasError('min') || s.age.hasError('max')">
                                 Enter value between 18 and 55
-                          </div> 
+                            </div>
                         </div>
                     </div>
                     <div class="form-group col-2">
@@ -175,7 +184,7 @@
                             <div *ngIf="s.gpa.errors.pattern">Enter Numeric value only</div>
                             <div *ngIf="s.gpa.hasError('min') || s.gpa.hasError('max')">
                                 Enter value between 0 and 5
-                          </div> 
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -187,3 +196,47 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<ng-template #deleteModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Delete
+        {{ selectedStudent?(selectedStudent.firstName + ' ' + selectedStudent.lastName):(selectedClass?.name) }}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        Are you sure you want to Delete
+        {{ selectedStudent?(selectedStudent.firstName + ' ' + selectedStudent.lastName):(selectedClass?.name) }}?
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-secondary" (click)="modal.close('Close click')">Close</button>
+        <button type="button" ngbAutofocus class="btn btn-sm btn-danger btn-delete-user" data-dismiss="modal"
+        (click)="modal.close('Delete')">Delete</button>
+    </div>
+  </ng-template>
+<!-- <div class="modal fade" id="deleteModalCenter" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Delete
+                    {{ selectedStudent?(selectedStudent.firstName + ' ' + selectedStudent.lastName):(selectedClass?.name) }}
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to Delete
+                {{ selectedStudent?(selectedStudent.firstName + ' ' + selectedStudent.lastName):(selectedClass?.name) }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-sm btn-danger btn-delete-user" data-dismiss="modal"
+                    (click)="deleteClass()">Delete</button>
+            </div>
+        </div>
+    </div>
+</div> -->

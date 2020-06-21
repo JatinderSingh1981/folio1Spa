@@ -1,5 +1,27 @@
-<!-- main app container -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="">Mixed Approach</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/folio-class-student-dynamic">Template Driven</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/folio-class-dynamic">Sub Components</a>
+      </li>
+
+    </ul>
+
+  </div>
+</nav>
+
 <div class="app-container">
-  <!-- <router-outlet></router-outlet>> -->
-  <app-folio-class-student></app-folio-class-student>
+  <router-outlet></router-outlet>
+
 </div>

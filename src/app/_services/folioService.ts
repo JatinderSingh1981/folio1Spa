@@ -34,7 +34,7 @@ export class FolioService {
             }));
     }
 
-    deleteClass(id: string) {
+    deleteClass(id: number) {
         return this.http.delete<APIClassResult>(`${environment.apiUrl}/folioclasses/${id}`)
             .pipe(map(x => {
                 
@@ -61,7 +61,7 @@ export class FolioService {
             }));
     }
 
-    deleteStudent(id: string) {
+    deleteStudent(id: number) {
         return this.http.delete<APIResult>(`${environment.apiUrl}/students/${id}`)
             .pipe(map(x => {
                 return x;
