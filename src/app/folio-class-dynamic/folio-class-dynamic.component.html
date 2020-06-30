@@ -99,5 +99,7 @@
     </div>
 </form>
 
-<app-folio-student-dynamic [(selectedClass)]="selectedClass" [(addOrEditingStudent)]="addOrEditingStudent" (showAlertMessage)='showAlertMessage($event.showSuccessMessage, $event.message)'>
+<app-folio-student-dynamic [(selectedClass)]="selectedClass" [(addOrEditingClass)]="addOrEditingClass"
+    [(deletingClass)]="deletingClass" [(addOrEditingStudent)]="addOrEditingStudent"
+    (showAlertMessage)='showAlertMessage($event.showSuccessMessage, $event.message)'>
 </app-folio-student-dynamic>

@@ -24,6 +24,11 @@ export class FolioStudentDynamicComponent implements OnInit {
   @Input()
   addOrEditingStudent = false;
 
+  @Input()
+  addOrEditingClass = false;
+  @Input()
+  deletingClass = false;
+
   @Output() showAlertMessage = new EventEmitter();
 
   selectedStudent = null;
@@ -32,6 +37,8 @@ export class FolioStudentDynamicComponent implements OnInit {
   studentsOriginal = null;
 
   deletingStudent = false;
+
+  
 
   minNum = 15;
   maxNum = 55;
