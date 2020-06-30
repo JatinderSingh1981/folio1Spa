@@ -38,7 +38,7 @@ export class FolioStudentDynamicComponent implements OnInit {
 
   deletingStudent = false;
 
-  
+
 
   minNum = 15;
   maxNum = 55;
@@ -52,16 +52,16 @@ export class FolioStudentDynamicComponent implements OnInit {
 
   getStudentsForSelectedClass() {
     this.onStudentReset(null);
-
-    this.fService.getStudentsForSelectedClass(this.selectedClass.id)
-      .pipe(first())
-      .subscribe((result) => {
-        if (result && result.item1)
-          this.students = result.item1;
-        else
-          this.students = [];
-        this.studentsOriginal = JSON.parse(JSON.stringify(this.students));
-      });
+    if (this.selectedClass)
+      this.fService.getStudentsForSelectedClass(this.selectedClass.id)
+        .pipe(first())
+        .subscribe((result) => {
+          if (result && result.item1)
+            this.students = result.item1;
+          else
+            this.students = [];
+          this.studentsOriginal = JSON.parse(JSON.stringify(this.students));
+        });
   }
   showMessage(showSuccessMessage: boolean, message: string) {
     var alertMessage = new messageToParent();
