@@ -1,1 +1,120 @@
-<p>folio-student-dynamic works!</p>
+<!-- Student Section -->
+<form #studentForm="ngForm" name="form" (ngSubmit)="onStudentSubmit()"
+    *ngIf="selectedClass && !(deletingClass || addOrEditingClass)">
+    <!-- <div>{{this.selectedStudent | json}}</div> -->
+    <div class="card m-3">
+        <h5 class="card-header">{{selectedClass.name}}</h5>
+        <div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th style="width: 20%">Student Name</th>
+                        <th style="width: 20%"></th>
+                        <th style="width: 25%">Age</th>
+                        <th style="width: 25%">GPA</th>
+                        <th style="width: 10%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let student of students">
+                        <td [ngClass]="{'text-success' : student.gpa>=highLightGPA}" *ngIf="!student.isEditing" colspan="2">
+
+                            {{student.firstName + " " +  student.lastName}}
+
+                        </td>
+                        <td *ngIf="student.isEditing">
+                            <input type="text" required name="firstName" #firstName="ngModel"
+                                [(ngModel)]="student.firstName" class="form-control"
+                                [ngClass]="{ 'is-invalid': firstName.errors && (firstName.touched || firstName.dirty) }" />
+                            <div *ngIf="firstName.errors && (firstName.touched || firstName.dirty)"
+                                class="invalid-feedback">
+                                <div *ngIf="firstName.errors.required">First Name is required</div>
+                            </div>
+                        </td>
+                        <td *ngIf="student.isEditing">
+                            <input type="text" required name="lastName" #lastName="ngModel"
+                                [(ngModel)]="student.lastName" class="form-control"
+                                [ngClass]="{ 'is-invalid': lastName.errors && (lastName.touched || lastName.dirty) }" />
+                            <div *ngIf="lastName.errors && (lastName.touched || lastName.dirty)"
+                                class="invalid-feedback">
+                                <div *ngIf="lastName.errors.required">Last Name is required</div>
+                            </div>
+
+                        </td>
+                        <td>
+                            <span *ngIf="!student.isEditing">
+                                {{student.age}}
+                            </span>
+                            <div *ngIf="student.isEditing">
+                                <input [customMin]="minNum" [customMax]="maxNum" type="number" required maxlength="2" name="age"
+                                    #age="ngModel" [(ngModel)]="student.age" class="form-control"
+                                    [ngClass]="{ 'is-invalid': age.errors && (age.touched || age.dirty) }" />
+                                <div *ngIf="age.errors && (age.touched || age.dirty)" class="invalid-feedback">
+                                    <div *ngIf="age.errors.required">Age is required</div>
+                                    <div *ngIf="age.errors.pattern">Enter Numeric value only</div>
+                                    <div *ngIf="age.errors?.customMin || age.errors?.customMax">
+                                        Enter value between {{minNum}} and {{maxNum}}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </td>
+                        <td>
+                            <span *ngIf="!student.isEditing">
+                                {{student.gpa}}
+                            </span>
+                            <div *ngIf="student.isEditing">
+                                <input type="number" required  name="gpa" [customMin]="0" [customMax]="5" 
+                                    #gpa="ngModel" [(ngModel)]="student.gpa" class="form-control"
+                                    [ngClass]="{ 'is-invalid': gpa.errors && (gpa.touched || gpa.dirty) }" />
+                                <div *ngIf="gpa.errors && (gpa.touched || gpa.dirty)" class="invalid-feedback">
+                                    <div *ngIf="gpa.errors.required">GPA is required</div>
+                                    <div *ngIf="gpa.errors.pattern">Enter Numeric value only</div>
+                                    <div *ngIf="gpa.errors?.customMin || gpa.errors?.customMax">
+                                        Enter value between 0 and 5
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="white-space: nowrap">
+                            <div class="form-group col-3" *ngIf="!student.isEditing">
+                                <button (click)="editStudent(student)" class="btn btn-sm btn-primary mr-1"
+                                    [disabled]="(deletingStudent || addOrEditingStudent)">
+                                    Edit
+                                </button>
+                                <button (click)="deleteStudent(student)"
+                                    class="btn btn-sm btn-danger btn-delete-user"
+                                    [disabled]="(deletingStudent || addOrEditingStudent)">
+                                    <span *ngIf="student.isDeleting" class="spinner-border spinner-border-sm"></span>
+                                    <span *ngIf="!student.isDeleting">Delete</span>
+                                </button>
+                            </div>
+                            <div class="form-group col-3" *ngIf="student.isEditing">
+                                <button class="btn btn-sm  btn-primary mr-1"
+                                    [disabled]="studentForm.invalid">Save</button>
+                                <button class="btn btn-sm  btn-secondary" type="reset"
+                                    (click)="onStudentReset(student)">Cancel</button>
+
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="!students">
+                        <td colspan="4" class="text-center">
+                            <span class="align-center">
+                                No Record Found
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <h5 class="card-header">
+                <button (click)="addStudentClicked()" class="btn btn-sm btn-primary mr-1"
+                    [disabled]="(deletingStudent || addOrEditingStudent)">
+                    Add
+                </button>
+            </h5>
+        </div>
+
+    </div>
+</form>

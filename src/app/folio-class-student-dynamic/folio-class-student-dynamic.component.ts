@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, FormsModule, Validators } from '@angular/forms';
 import { FolioClassTemplate, StudentTemplate } from '../_models';
 import { FolioService } from '../_services';
 import { AlertService } from '../alert/alert.service';
 import { first } from 'rxjs/operators';
-import { FolioClassDynamicComponent } from '../folio-class-dynamic/folio-class-dynamic.component';
 
 @Component({
   selector: 'app-folio-class-student-dynamic',
@@ -44,23 +42,6 @@ export class FolioClassStudentDynamicComponent implements OnInit {
   constructor(private fService: FolioService, private alertService: AlertService) { }
 
   ngOnInit(): void {
-
-    // this.classForm = this.formBuilder.group({
-    //   id: 0,
-    //   name: ['', Validators.required],
-    //   location: ['', Validators.required],
-    //   teacherName: ['', Validators.required]
-    // });
-
-    // this.studentForm = this.formBuilder.group({
-    //   id: 0,
-    //   folioClassId: 0,
-    //   firstName: ['', Validators.required],
-    //   lastName: ['', Validators.required],
-    //   age: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(18), Validators.max(55)]],
-    //   gpa: ['', [Validators.required, Validators.pattern("^[0-9]*\.?\[0-9]{0,2}$"), Validators.min(0), Validators.max(5)]],
-    // });
-
     this.getAllClasses();
   }
   showAlertMessage(showSuccessMessage: boolean, message: string) {
