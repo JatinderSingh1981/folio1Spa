@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   //apiUrl: 'http://localhost:55217/api'
-  apiUrl: 'https://folio1apptest20200618000446.azurewebsites.net/api'
+  apiUrl: 'https://folioapi.azurewebsites.net/api'
 };
 
 /*
